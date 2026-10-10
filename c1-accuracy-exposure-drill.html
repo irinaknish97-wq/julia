@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Identity, taste &amp; mindset — C1+ Drill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F6F1E4;
+    --paper: #FBF8F0;
+    --ink: #2E2A21;
+    --ink-soft: #5C5646;
+    --olive: #6B7355;
+    --olive-dark: #4F5740;
+    --olive-light: #DDE2CE;
+    --terracotta: #BE5F38;
+    --terracotta-soft: #F0DBC9;
+    --sage-line: #D8D0B8;
+    --success: #6E8351;
+    --success-bg: #E4EBD9;
+    --error: #B0512E;
+    --error-bg: #F5DFD3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 40px 24px 90px; }
+  header.page-head { margin-bottom: 26px; }
+  header.page-head .kicker { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--olive-dark); margin-bottom: 8px; }
+  header.page-head h1 { font-size: 27px; font-weight: 600; margin: 0 0 8px; line-height: 1.25; }
+  header.page-head p { color: var(--ink-soft); margin: 0; font-size: 15px; max-width: 64ch; }
+
+  .tabs { display: flex; gap: 4px; margin: 26px 0 22px; border-bottom: 1px solid var(--sage-line); }
+  .tab-btn { font-family: 'DM Sans', sans-serif; font-size: 14.5px; font-weight: 500; background: none; border: none; padding: 10px 4px 12px; margin-right: 22px; color: var(--ink-soft); cursor: pointer; position: relative; top: 1px; }
+  .tab-btn.active { color: var(--ink); border-bottom: 2px solid var(--terracotta); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: var(--paper); border: 1px solid var(--sage-line); border-radius: 10px; padding: 22px 24px; margin-bottom: 16px; }
+  .card h2 { font-size: 18px; font-weight: 600; margin: 0 0 6px; }
+  .instructions { color: var(--ink-soft); font-size: 14px; margin: 0 0 18px; max-width: 62ch; }
+
+  .group-title { font-family: 'DM Mono', monospace; font-size: 12.5px; color: var(--olive-dark); margin: 26px 0 4px; padding-bottom: 6px; border-bottom: 1px solid var(--sage-line); }
+  .group-title:first-of-type { margin-top: 4px; }
+
+  /* Exercise 1 */
+  .gap-item { padding: 12px 0; border-bottom: 1px dashed var(--sage-line); }
+  .gap-item:last-child { border-bottom: none; }
+  .num { font-family: 'DM Mono', monospace; font-size: 12.5px; color: var(--olive-dark); margin-right: 6px; }
+  .sent { font-size: 15.5px; }
+  input.gap {
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: var(--ink);
+    border: none; border-bottom: 2px solid var(--olive); background: transparent;
+    padding: 1px 4px; margin: 0 3px; text-align: center; min-width: 52px;
+  }
+  input.gap:focus { outline: none; border-bottom-color: var(--terracotta); background: var(--olive-light); }
+  input.gap.correct { border-bottom-color: var(--success); background: var(--success-bg); color: var(--olive-dark); }
+  input.gap.incorrect { border-bottom-color: var(--error); background: var(--error-bg); }
+  input.gap.revealed { border-bottom-color: var(--olive); background: var(--olive-light); color: var(--olive-dark); font-style: italic; }
+  .fb { display: none; font-size: 13px; color: var(--error); margin-top: 5px; max-width: 60ch; }
+  .fb.show { display: block; }
+
+  /* Exercise 2 */
+  .mcq { padding: 18px 0; border-top: 1px solid var(--sage-line); }
+  .mcq:first-of-type { border-top: none; padding-top: 2px; }
+  .mcq .q { font-size: 15.5px; margin: 0 0 10px; }
+  .mcq .q .blank { font-weight: 600; letter-spacing: 1px; color: var(--olive-dark); }
+  .opts { display: flex; flex-direction: column; gap: 6px; }
+  .opts label { display: flex; align-items: baseline; gap: 10px; font-size: 14.5px; padding: 7px 12px; border: 1px solid var(--sage-line); border-radius: 8px; cursor: pointer; background: var(--cream); }
+  .opts label:hover { border-color: var(--olive); }
+  .opts input { accent-color: var(--olive); margin: 0; }
+  .opts .letter { font-family: 'DM Mono', monospace; font-size: 12.5px; color: var(--olive-dark); }
+  .opts label.picked-right { background: var(--success-bg); border-color: var(--success); }
+  .opts label.picked-wrong { background: var(--error-bg); border-color: var(--error); }
+  .opts label.revealed { background: var(--olive-light); border-color: var(--olive); }
+  .mfb { display: none; font-size: 13.5px; margin-top: 8px; padding: 8px 12px; border-radius: 6px; max-width: 64ch; }
+  .mfb.show { display: block; }
+  .mfb.right { background: var(--success-bg); color: var(--olive-dark); }
+  .mfb.wrong { background: var(--error-bg); color: var(--error); }
+  .mfb.info { background: var(--olive-light); color: var(--olive-dark); }
+
+  .action-row { display: flex; align-items: center; gap: 14px; margin-top: 22px; flex-wrap: wrap; }
+  button.primary { font-family: 'DM Sans', sans-serif; font-size: 14.5px; font-weight: 600; background: var(--terracotta); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+  button.primary:hover { background: #a94e2c; }
+  button.ghost { font-family: 'DM Sans', sans-serif; font-size: 13.5px; background: none; border: 1px solid var(--sage-line); color: var(--ink-soft); padding: 9px 16px; border-radius: 8px; cursor: pointer; }
+  .score { font-family: 'DM Mono', monospace; font-size: 13.5px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-head">
+    <div class="kicker">C1+ · Identity, taste &amp; mindset</div>
+    <h1>Say it accurately, then recognise it in the wild</h1>
+    <p>Exercise 1 is about getting the small words exactly right. Exercise 2 is about meeting the new language in context and choosing what fits best.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="t1">1 · Complete it</button>
+    <button class="tab-btn" data-tab="t2">2 · Choose the best</button>
+  </div>
+
+  <div class="panel active" id="t1">
+    <div class="card">
+      <h2>Type the missing part</h2>
+      <p class="instructions">Each sentence is missing one small but important piece — a preposition, an article, a part of a fixed phrase, sometimes a key word. Type only what's missing.</p>
+      <div id="gapList"></div>
+      <div class="action-row">
+        <button class="primary" id="checkGap">Check my answers</button>
+        <button class="ghost" id="showGap">Show answers</button>
+        <button class="ghost" id="resetGap">Reset</button>
+        <span class="score" id="scoreGap"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="t2">
+    <div class="card">
+      <h2>Which one fits best?</h2>
+      <p class="instructions">Read each sentence in context and pick the best option, A, B or C. After you check, read the explanations — they tell you what each phrase really means.</p>
+      <div id="mcqList"></div>
+      <div class="action-row">
+        <button class="primary" id="checkMcq">Check my answers</button>
+        <button class="ghost" id="showMcq">Show answers</button>
+        <button class="ghost" id="resetMcq">Reset</button>
+        <span class="score" id="scoreMcq"></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  function norm(s) {
+    return s.toLowerCase()
+      .replace(/[\u2019\u2018]/g, "'")
+      .replace(/-/g, ' ')
+      .replace(/[.,!?;:]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // ================= EXERCISE 1 =================
+  const groups = [
+    { title: "How good are you? Skills &amp; progress", items: [
+      { pre: "I'm doing pretty well ", post: " my new budget so far.", a: ["with"], why: "It's \"doing well WITH something\" — the preposition that links your progress to the thing you're managing." },
+      { pre: "I'm not much of ", post: " cook, honestly.", a: ["a"], why: "The pattern is \"not much OF A + noun\" — the article \"a\" is part of the fixed structure and can't be dropped." },
+      { pre: "I'm more ", post: " a night owl than a morning person.", a: ["of"], why: "The pattern is \"more OF a + noun\" — you need \"of\" before \"a\"." },
+      { pre: "I suck ", post: " small talk — I never know what to say.", a: ["at"], why: "It's \"suck AT something\", the same preposition as \"good at\" and \"terrible at\"." },
+      { pre: "I'm pretty ", post: " terrible at remembering names.", a: ["much"], why: "\"Pretty much\" is a fixed softener meaning \"basically\" — it can't be shortened to just \"pretty\" here." },
+      { pre: "I'm not ", post: " good at public speaking.", a: ["particularly"], why: "You need the adverb \"particularly\" (not \"particular\"), because it modifies the adjective \"good\"." },
+      { pre: "I'm not particularly ", post: " jazz, to be honest.", a: ["into"], why: "\"Not particularly INTO something\" = not especially interested in it. \"In\" on its own doesn't work." },
+      { pre: "Honestly, patience has never been my strong ", post: ".", a: ["suit"], why: "The idiom is \"my strong SUIT\" (or just \"my forte\" — without \"strong\")." },
+      { pre: "I'm just not cut ", post: " for early mornings.", a: ["out"], why: "\"Cut OUT for something\" = naturally suited to it. \"Built for\" works too, but \"cut\" needs \"out\"." },
+      { pre: "Some people can improvise. I'm just not wired ", post: " way.", a: ["this", "that"], why: "\"Wired THIS/THAT way\" — you need the demonstrative before \"way\". (\"Built this way\" works the same.)" },
+      { pre: "Honestly, I could ", post: " a little more discipline in the mornings.", a: ["use"], why: "\"Could USE something\" = could do with it / would benefit from it. No preposition needed after it." }
+    ]},
+    { title: "Habits &amp; routines", items: [
+      { pre: "I do my stretches ", post: " — every single night, no matter what.", a: ["religiously"], why: "You need the adverb \"religiously\" (not \"religious\") because it describes how you do something." },
+      { pre: "I journal every night, no ", post: " what.", a: ["matter"], why: "The fixed phrase is \"no MATTER what\" — it means \"regardless of anything\"." },
+      { pre: "My Sunday call with my parents is non-negotiable ", post: " me.", a: ["for"], why: "\"Non-negotiable FOR me\" — the preposition \"for\" shows whose rule it is." },
+      { pre: "This playlist is my absolute go-", post: " when I need to focus.", a: ["to"], why: "The noun is \"go-TO\" (hyphenated) — your default, most reliable choice." },
+      { pre: "When I'm stressed, my absolute ", post: " is a long walk.", a: ["go-to", "go to"], why: "You need the noun \"go-to\" — the thing you always choose first." },
+      { pre: "Checking my calendar has literally become second ", post: " to me.", a: ["nature"], why: "\"Become second NATURE\" = something you do automatically, without thinking." },
+      { pre: "I'm trying to ", post: " flossing second nature, but I keep forgetting.", a: ["make"], why: "The verb is \"MAKE something second nature\" = turn it into an automatic habit." },
+      { pre: "I get a real kick ", post: " of organizing my bookshelves.", a: ["out"], why: "The full phrase is \"a kick OUT OF something\" — don't drop \"out\"." },
+      { pre: "I naturally ", post: " towards people who are calm and kind.", a: ["gravitate"], why: "The verb is \"gravitate\" (towards something/someone) = be naturally pulled to it." }
+    ]},
+    { title: "Taste &amp; preferences", items: [
+      { pre: "I'm not that big ", post: " a fan of horror movies.", a: ["of"], why: "The structure is \"not that big OF A fan of…\" — \"of\" is needed before \"a fan\"." },
+      { pre: "I'm quite a ", post: " fan of Studio Ghibli films.", a: ["huge", "big"], why: "Use an adjective of size/degree before \"fan\": \"quite a HUGE fan\"." },
+      { pre: "Karaoke is not ", post: " my thing, I guess.", a: ["exactly", "really"], why: "\"Not EXACTLY my thing\" softens the statement — it means \"not really my thing\"." },
+      { pre: "I'm pretty big ", post: " routine — I eat the same breakfast every day.", a: ["on"], why: "The idiom is \"big ON something\" = really into / a strong supporter of it." },
+      { pre: "I'm not that ", post: " on spicy food.", a: ["big"], why: "\"Not that BIG on something\" = not especially keen on it." },
+      { pre: "A project like this is definitely right ", post: " my alley.", a: ["up"], why: "The idiom is \"right UP my alley\" (or \"up my street\") = exactly my kind of thing." },
+      { pre: "I just ", post: " it — the whole minimalist vibe really appeals to me.", a: ["dig"], why: "\"Dig\" is informal for \"like\" or \"appreciate\" — \"I dig it\"." },
+      { pre: "I'm pretty ", post: " into minimalism these days.", a: ["much"], why: "\"Pretty MUCH into something\" — \"pretty much\" is the fixed softener meaning \"basically\"." },
+      { pre: "I'm not ", post: " into sports, to be honest.", a: ["exactly", "that"], why: "You need a softener: \"not EXACTLY into\" or \"not THAT into\" = not very interested." },
+      { pre: "I'm naturally drawn ", post: " quiet, slow mornings.", a: ["to"], why: "\"Drawn TO something\" = naturally attracted to it." },
+      { pre: "Honestly, a good bowl of ramen just does it ", post: " me.", a: ["for"], why: "The idiom is \"does it FOR me\" = it satisfies me perfectly." },
+      { pre: "Modern art just doesn't ", post: " it for me.", a: ["do"], why: "The idiom uses \"DO\": \"doesn't do it for me\" = doesn't appeal to me." }
+    ]},
+    { title: "Types of person", items: [
+      { pre: "I'm not the one ", post: " complain, but this soup is cold.", a: ["to"], why: "\"Not the one TO + verb\" — here you need the infinitive marker \"to\"." },
+      { pre: "I'm not the one ", post: " will volunteer for a task like that.", a: ["who"], why: "After \"the one\" with a subject role, you need the relative pronoun \"WHO\" (a person)." },
+      { pre: "I'm not the kind ", post: " person who plans every detail.", a: ["of"], why: "\"The kind OF person\" — \"of\" is needed between \"kind\" and the noun." },
+      { pre: "I'm not one of those ", post: " who reply to messages instantly.", a: ["people"], why: "The fixed structure is \"one of those PEOPLE who…\"." },
+      { pre: "I'm not somebody ", post: " gets up early voluntarily.", a: ["who"], why: "\"Somebody WHO…\" — you need a relative pronoun for a person." },
+      { pre: "I'm a bit ", post: " a perfectionist, if I'm honest.", a: ["of"], why: "\"A bit OF A + noun\" — the full structure includes both \"of\" and \"a\"." }
+    ]},
+    { title: "How interests start (and grow)", items: [
+      { pre: "I got ", post: " yoga about two years ago, and now I can't stop.", a: ["into"], why: "\"Get INTO something\" = become interested in it. \"In\" alone doesn't work." },
+      { pre: "I ", post: " up knitting during lockdown, and it stuck.", a: ["picked"], why: "\"Pick up\" a hobby = start doing it casually. Past form: \"PICKED up\"." },
+      { pre: "At first I hated the show, but it really grew ", post: " me.", a: ["on"], why: "The idiom is \"grow ON someone\" = gradually become more likeable to them." },
+      { pre: "The city started ", post: " on me after a few months.", a: ["growing"], why: "After \"started\", use the -ing form: \"started GROWING on me\"." },
+      { pre: "I'm sure this new office will eventually ", post: " on me.", a: ["grow"], why: "After \"will\", use the base form: \"will GROW on me\"." }
+    ]}
+  ];
+
+  const gapListEl = document.getElementById('gapList');
+  const allGaps = [];
+  let counter = 0;
+  groups.forEach(g => {
+    const h = document.createElement('div');
+    h.className = 'group-title';
+    h.innerHTML = g.title;
+    gapListEl.appendChild(h);
+    g.items.forEach(item => {
+      counter++;
+      item.id = counter;
+      allGaps.push(item);
+      const longest = Math.max(...item.a.map(x => x.length));
+      const width = Math.max(4.2, longest * 0.62 + 1.6);
+      const div = document.createElement('div');
+      div.className = 'gap-item';
+      div.innerHTML =
+        '<span class="num">' + counter + '.</span><span class="sent">' + item.pre +
+        '<input type="text" class="gap" data-id="' + counter + '" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:' + width + 'em">' +
+        item.post + '</span><div class="fb" id="fb-' + counter + '"></div>';
+      gapListEl.appendChild(div);
+    });
+  });
+
+  document.getElementById('checkGap').addEventListener('click', () => {
+    let correct = 0;
+    allGaps.forEach(item => {
+      const input = document.querySelector('input.gap[data-id="' + item.id + '"]');
+      const fb = document.getElementById('fb-' + item.id);
+      const val = norm(input.value);
+      input.classList.remove('correct', 'incorrect', 'revealed');
+      if (val && item.a.some(x => norm(x) === val)) {
+        input.classList.add('correct');
+        fb.classList.remove('show');
+        correct++;
+      } else {
+        input.classList.add('incorrect');
+        fb.textContent = val ? "Not quite — " + item.why : "Type the missing part first. Hint: " + item.why.split(' — ')[0];
+        fb.classList.add('show');
+      }
+    });
+    document.getElementById('scoreGap').textContent = correct + ' / ' + allGaps.length + ' correct';
+  });
+
+  document.getElementById('showGap').addEventListener('click', () => {
+    allGaps.forEach(item => {
+      const input = document.querySelector('input.gap[data-id="' + item.id + '"]');
+      input.value = item.a[0];
+      input.classList.remove('correct', 'incorrect');
+      input.classList.add('revealed');
+      document.getElementById('fb-' + item.id).classList.remove('show');
+    });
+    document.getElementById('scoreGap').textContent = 'Answers revealed';
+  });
+
+  document.getElementById('resetGap').addEventListener('click', () => {
+    allGaps.forEach(item => {
+      const input = document.querySelector('input.gap[data-id="' + item.id + '"]');
+      input.value = '';
+      input.classList.remove('correct', 'incorrect', 'revealed');
+      document.getElementById('fb-' + item.id).classList.remove('show');
+    });
+    document.getElementById('scoreGap').textContent = '';
+  });
+
+  // ================= EXERCISE 2 =================
+  const mcqData = [
+    { q: "After two weeks off, I didn't ease back in at all. On my first morning I ___ a massive project.", o: ["eased myself into", "jumped straight into", "got round to"], c: 1, why: "\"Jump straight into\" = start something immediately, with no warm-up. The first option is the opposite, and \"got round to\" means finally finding time to do something." },
+    { q: "I'm not a steady worker. I get ___ of energy at night, clean the whole flat, and then crash for two days.", o: ["levels", "bursts", "pieces"], c: 1, why: "\"Bursts (or hits) of energy\" = short, intense periods of energy. Energy doesn't come in \"pieces\" or \"levels\" in this collocation." },
+    { q: "I always feel flat in the morning until the coffee ___ — and then I'm unstoppable.", o: ["kicks in", "kicks off", "kicks back"], c: 0, why: "\"Kick in\" = start to take effect (my energy kicks in, the painkillers kick in). \"Kick off\" is for starting an event; \"kick back\" means relax." },
+    { q: "I never measure the spices when I cook — I just ___ it.", o: ["overlook", "double-check", "eyeball"], c: 2, why: "\"Eyeball (something)\" = estimate it by looking, without measuring exactly." },
+    { q: "It took me almost a year to ___ the breakup.", o: ["get across", "get over", "get along"], c: 1, why: "\"Get over something\" = recover from it. \"Get along\" is about relationships (get along with sb); \"get across\" is to communicate an idea or cross something." },
+    { q: "You've been moping for a week now. Come on — time to ___!", o: ["snap out of it", "snap it up", "snap back at it"], c: 0, why: "\"Snap out of it\" = stop being in a bad mood and pull yourself together. Usually said as advice, sometimes a bit harshly." },
+    { q: "Sorry, I can't take on anything else right now. I've got ___.", o: ["a lot on my mind", "a lot in my hands", "a lot on my plate"], c: 2, why: "\"A lot on my plate\" = a lot of tasks and responsibilities. \"A lot on my mind\" would mean worries, not workload." },
+    { q: "Our flat has a garden, ___ — it's basically a patch of grass behind the bins.", o: ["of course", "of sorts", "for sure"], c: 1, why: "\"Of sorts\" = in a loose, not-quite-proper way. A garden of sorts is something like a garden, but not really one." },
+    { q: "Moving abroad was terrifying at first, but ___ it was the best thing that ever happened to me.", o: ["by the way", "on the way", "in a way"], c: 2, why: "\"In a way\" = to some extent / looking at it from one angle. \"By the way\" changes the subject; \"on the way\" is about a journey." },
+    { q: "Stop ___ every tiny mistake — nobody else even noticed it.", o: ["obsessing over", "insisting on", "caring with"], c: 0, why: "\"Obsess over/about something\" = can't stop thinking about it, usually in an unhelpful way." },
+    { q: "Which of these shows someone spiralling?", o: ["I made a small mistake, fixed it, and moved on.", "I made one small mistake and spent all night convinced I'd get fired.", "I made a mistake and laughed it off."], c: 1, why: "\"Spiral about/over something\" = let your thoughts get more and more negative and out of control, starting from something small." },
+    { q: "I'd go for something ___ and simple — clean lines, no unnecessary details.", o: ["bulky", "over-the-top", "sleek"], c: 2, why: "\"Sleek\" = smooth, stylish and simple in design. It's the opposite of \"over-the-top\"." },
+    { q: "The wedding was completely ___ — a live orchestra, fireworks, and a helicopter entrance.", o: ["over-the-top", "sleek", "modest"], c: 0, why: "\"Over-the-top\" = excessive, too extravagant for the situation." },
+    { q: "He drives a really ___ car — gold wheels and all — just so people notice him.", o: ["subtle", "flashy", "reserved"], c: 1, why: "\"Flashy\" = designed to attract attention, often to show off wealth. \"Subtle\" and \"reserved\" are the opposite." },
+    { q: "The flat is small, but the rent is ___ cheap for this part of the city.", o: ["relatively", "hardly", "absolutely"], c: 0, why: "\"Relatively\" = compared with something else (here, other flats in the area), not in absolute terms." },
+    { q: "It took me ages to ___ the difference between the two tenses.", o: ["grab", "grasp", "grip"], c: 1, why: "\"Grasp\" also means understand (grasp a concept). \"Grab\" and \"grip\" are only physical." },
+    { q: "I'm still trying to ___ how to set up this printer — the manual is useless.", o: ["figure out", "figure on", "make up"], c: 0, why: "\"Figure out\" = work out / understand how to do something. \"Figure on\" means expect; \"make up\" means invent." },
+    { q: "His mood is closely ___ the weather — one grey day and he's down for hours.", o: ["tied up", "tied to", "tied down"], c: 1, why: "\"Closely tied to\" = strongly connected with. \"Tied up\" = busy; \"tied down\" = restricted." },
+    { q: "My schedule has been ___ this week — meetings moved, deadlines changed, and I honestly don't know what I'm doing.", o: ["out of place", "all over the place", "in the right place"], c: 1, why: "\"All over the place\" = disorganised, chaotic (a schedule, a person, your emotions). \"Out of place\" means not fitting in." },
+    { q: "I never thought learning basic first aid would ___, but it saved my friend's life.", o: ["come across", "come in handy", "come in line"], c: 1, why: "\"Come in handy\" = turn out to be useful." },
+    { q: "The museum is free on Sundays, so let's ___ that and go.", o: ["take care of", "take account of", "take advantage of"], c: 2, why: "\"Take advantage of something\" = make good use of an opportunity." },
+    { q: "I felt he was ___ my kindness — he kept borrowing money and never paid it back.", o: ["taking advantage of", "taking care of", "taking after"], c: 0, why: "\"Take advantage of sb\" = use someone unfairly for your own benefit (negative). It's very different from \"take care of\" or \"take after\"." },
+    { q: "After years of arguing about money, the two business partners finally decided to ___.", o: ["split hairs", "break ranks", "part ways"], c: 2, why: "\"Part ways\" = end a relationship or partnership and go in separate directions." },
+    { q: "Things are much better now — I'm finally in a good ___ mentally.", o: ["position", "place", "point"], c: 1, why: "\"In a good/bad/dark place\" = in a positive or negative emotional state. \"Position\" is about your situation or advantage." },
+    { q: "She didn't answer anyone's messages for weeks. She was clearly in a ___ place.", o: ["tight", "distant", "dark"], c: 2, why: "\"In a dark place\" = in a very low, difficult mental state." },
+    { q: "\"Pizza in Naples just hits different.\" What does she mean?", o: ["It tastes noticeably better and more memorable than usual.", "It is very cheap.", "It makes her feel sick."], c: 0, why: "\"Hit(s) different\" (informal) = feels special or more intense than the same thing normally does." },
+    { q: "I haven't painted anything in two months. I think I'm in a creative ___.", o: ["slope", "slip", "slump"], c: 2, why: "A \"slump\" is a period of low performance or energy, so \"a creative slump\" = a time when ideas and motivation dry up." },
+    { q: "Our visa application has been pending for eight months, so we can't plan anything. We're stuck ___.", o: ["in a rut", "in limbo", "in traffic"], c: 1, why: "\"Stuck in limbo\" = stuck in an uncertain in-between state, waiting. \"In a rut\" = stuck in a boring, repetitive routine." },
+    { q: "I wanted to finish the book, but a hundred small distractions kept getting ___.", o: ["on the way", "by the way", "in the way"], c: 2, why: "\"Get in the way (of something)\" = block or interfere with it. \"On the way\" is about a journey; \"by the way\" changes the subject." },
+    { q: "Staying up until 3am scrolling ___ me any good — I'm wrecked the whole next day.", o: ["doesn't make", "doesn't give", "doesn't do"], c: 2, why: "\"It doesn't do me any good\" = it isn't beneficial for me. Also: \"it won't do you any good\", \"it didn't do me any good\"." }
+  ];
+
+  const mcqListEl = document.getElementById('mcqList');
+  const letters = ['A', 'B', 'C'];
+  mcqData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'mcq';
+    const qHtml = item.q.replace('___', '<span class="blank">______</span>');
+    const optsHtml = item.o.map((opt, oi) =>
+      '<label data-q="' + i + '" data-o="' + oi + '"><input type="radio" name="m' + i + '" value="' + oi + '"><span class="letter">' + letters[oi] + ')</span><span>' + opt + '</span></label>'
+    ).join('');
+    div.innerHTML = '<p class="q"><span class="num">' + (i + 1) + '.</span>' + qHtml + '</p><div class="opts">' + optsHtml + '</div><div class="mfb" id="mfb-' + i + '"></div>';
+    mcqListEl.appendChild(div);
+  });
+
+  function clearMcqStates() {
+    document.querySelectorAll('.opts label').forEach(l => l.classList.remove('picked-right', 'picked-wrong', 'revealed'));
+    document.querySelectorAll('.mfb').forEach(f => { f.className = 'mfb'; f.textContent = ''; });
+  }
+
+  document.getElementById('checkMcq').addEventListener('click', () => {
+    clearMcqStates();
+    let correct = 0;
+    mcqData.forEach((item, i) => {
+      const sel = document.querySelector('input[name="m' + i + '"]:checked');
+      const fb = document.getElementById('mfb-' + i);
+      if (!sel) {
+        fb.textContent = 'Pick an answer first.';
+        fb.classList.add('show', 'wrong');
+        return;
+      }
+      const picked = parseInt(sel.value, 10);
+      const label = document.querySelector('label[data-q="' + i + '"][data-o="' + picked + '"]');
+      if (picked === item.c) {
+        correct++;
+        label.classList.add('picked-right');
+        fb.textContent = 'Right — ' + item.why;
+        fb.classList.add('show', 'right');
+      } else {
+        label.classList.add('picked-wrong');
+        fb.textContent = 'Not quite — ' + item.why;
+        fb.classList.add('show', 'wrong');
+      }
+    });
+    document.getElementById('scoreMcq').textContent = correct + ' / ' + mcqData.length + ' correct';
+  });
+
+  document.getElementById('showMcq').addEventListener('click', () => {
+    clearMcqStates();
+    mcqData.forEach((item, i) => {
+      const radio = document.querySelector('input[name="m' + i + '"][value="' + item.c + '"]');
+      radio.checked = true;
+      document.querySelector('label[data-q="' + i + '"][data-o="' + item.c + '"]').classList.add('revealed');
+      const fb = document.getElementById('mfb-' + i);
+      fb.textContent = item.why;
+      fb.classList.add('show', 'info');
+    });
+    document.getElementById('scoreMcq').textContent = 'Answers revealed';
+  });
+
+  document.getElementById('resetMcq').addEventListener('click', () => {
+    clearMcqStates();
+    document.querySelectorAll('.opts input').forEach(r => { r.checked = false; });
+    document.getElementById('scoreMcq').textContent = '';
+  });
+</script>
+</body>
+</html>
